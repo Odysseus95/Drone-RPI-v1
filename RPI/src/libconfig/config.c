@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 
@@ -9,19 +9,19 @@ ConfigList configList;
 
 static ConfigList initList(char* option, char* argument) {
 	ConfigList list=malloc(sizeof(ConfigList));
-	if (list==NULL) {perror("malloc:failed to init list");exit(EXIT_FAILURE)};
-	list->option=option;
-	list->argument=argument;
+	if (list==NULL) {perror("malloc:failed to init list");exit(EXIT_FAILURE);};
+	strcpy(list->option,option);
+	strcpy(list->argument,argument);
 	list->next=NULL;
 	return list;		
 }
 
 
-static void add_head(ConfigList* plist,char* option,char* argument) {
+static void add_head(ConfigList* plist,char option[],char argument[]) {
 	Cell* newCell=malloc(sizeof(Cell));
-	if (newCell==NULL) {perror("malloc:failed to init cell");exit(EXIT_FAILURE)};
-	newCell->option=option;
-	newCell->argument=argument;
+	if (newCell==NULL) {perror("malloc:failed to init cell");exit(EXIT_FAILURE);};
+	strcpy((*plist)->option,option);
+	strcpy((*plist)->argument,argument);
 	newCell->next=*plist;
 	plist=&newCell;
 }
@@ -35,18 +35,18 @@ static void free_head(ConfigList* plist){
 
 
 static void free_list(ConfigList* plist){
-	while (*plist !=null) {
+	while (*plist !=NULL) {
 		free_head(plist);
 	}
 }
 
 
-void getConfig(char[] filepath) {
+void getConfig(char filepath[]) {
 	FILE* configFile=fopen(filepath,"r");
 	if(configFile==NULL) 
 	{
 		perror("getConfig.fopen");
-		printf("Configuration file %s not found\n");
+		printf("Configuration file %s not found\n",filepath);
 		exit(EXIT_FAILURE);
 	}
 	char option[100];
@@ -54,24 +54,24 @@ void getConfig(char[] filepath) {
 	fscanf(configFile,"%100s=%100s\n",option,argument);
 	configList=initList(option,argument);
 	while(fscanf(configFile,"%100s=%100s\n",option,argument)){
-		add_head(option,argument);
+		add_head(&configList,option,argument);
 	}	
 }
 
 
 void print_config(ConfigList list) {
-	printf("----------------\nCONFIGURATION\n----------------\n)"
+	printf("----------------\nCONFIGURATION\n----------------\n");
 	if (list != NULL) {
 		Cell* cellAct=list;
 		while(cellAct != NULL){
-			printf("%s=>%s\n");
+			printf("%s=>%s\n",cellAct->option,cellAct->argument);
 			cellAct=cellAct->next;
 		}
 	}
 }
 
 
-void config(char[] option) {	
+void config(char option[]) {	
 }
 
 

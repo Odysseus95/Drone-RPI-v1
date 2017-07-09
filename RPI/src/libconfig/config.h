@@ -5,8 +5,8 @@
 
 typedef struct Cell Cell;
 struct Cell {
-	char option[];
-	char argument[];
+	char option[100];
+	char argument[100];
 	Cell* next;
 };
 
@@ -14,8 +14,8 @@ typedef Cell* ConfigList;
 
 
 
-void getConfig(char[] filepath);
+void getConfig(char filepath[]);
 void print_config(ConfigList list);
-void config(char[] option);	
+void config(char option[]);	
 
 #endif
