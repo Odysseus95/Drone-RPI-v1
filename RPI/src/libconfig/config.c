@@ -89,7 +89,18 @@ void config_close() {
 }
 
 
-void config(char option[]) {	
+char* config(char option[]) {	
+	Cell* cellAct=configList;
+	int found=0;
+	char* res;
+	while(cellAct!=NULL && !found) {
+		if(strcmp(option,cellAct->option)==0) {
+			res=cellAct->argument;
+			found=1;
+		}
+		cellAct=cellAct->next;
+	}	
+	return res;
 }
 
 

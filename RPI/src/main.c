@@ -9,7 +9,8 @@
 
 int main() {
 	getConfig(CONFIG_PATH);
-	print_config();	
+	print_config();
+	//printf("%s\n",config("port"));	
 	config_close();
 	
 	return 0;
