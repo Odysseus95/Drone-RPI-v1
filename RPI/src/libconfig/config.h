@@ -15,7 +15,8 @@ typedef Cell* ConfigList;
 
 
 void getConfig(char filepath[]);
-void print_config(ConfigList list);
+void print_config();
 void config(char option[]);	
+void config_close();
 
 #endif
