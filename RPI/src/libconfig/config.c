@@ -5,7 +5,6 @@ Author : Odysseus
 Date : 09/07/2017
 --------------------------------------*/
 
-//TODO find memory leak
 
 
 #include <stdio.h>
@@ -16,9 +15,11 @@ Date : 09/07/2017
 
 //List where configuration is stored
 static ConfigList configList;
+//Configuration file pointer
+static FILE* configFile;
 
-static ConfigList initList(char* option, char* argument) {
-	ConfigList list=malloc(sizeof(ConfigList));
+static ConfigList initList(char option[], char argument[]) {
+	ConfigList list=malloc(sizeof(*list));
 	if (list==NULL) {perror("initList.malloc");exit(EXIT_FAILURE);};
 	strcpy(list->option,option);
 	strcpy(list->argument,argument);
@@ -48,14 +49,14 @@ static void free_list(ConfigList* plist){
 	while (*plist !=NULL) {
 		free_head(plist);
 	}
-	free(plist);
+//	free(plist);
 }
 
 
 
 //TODO prevent segfault with long string
 void getConfig(char filepath[]) {
-	FILE* configFile=NULL;
+	configFile=NULL;
 	configFile=fopen(filepath,"r");
 	if(configFile==NULL) 
 	{
@@ -65,10 +66,10 @@ void getConfig(char filepath[]) {
 	}
 	char option[100];
 	char argument[100];
-	fscanf(configFile,"%100s %100s\n",option,argument);
+	fscanf(configFile,"%99s %99s\n",option,argument);
 	configList=initList(option,argument);
 	while(!feof(configFile)){
-		fscanf(configFile,"%100s %100s\n",option,argument);
+		fscanf(configFile,"%99s%99s\n",option,argument);
 		add_head(&configList,option,argument);
 	}	
 }
@@ -85,7 +86,10 @@ void print_config() {
 
 
 void config_close() {
-	free_list(&configList);
+	if (configFile!=NULL) {
+		free_list(&configList);
+		fclose(configFile);
+	}
 }
 
 
@@ -102,17 +106,5 @@ char* config(char option[]) {
 	}	
 	return res;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
