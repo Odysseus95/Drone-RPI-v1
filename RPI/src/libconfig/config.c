@@ -49,7 +49,6 @@ static void free_list(ConfigList* plist){
 	while (*plist !=NULL) {
 		free_head(plist);
 	}
-//	free(plist);
 }
 
 
