@@ -7,6 +7,7 @@ LIBS = -lpthread
 LOCAL_LIBS  = -L libconfig  -L libthread
 LOCAL_LIBS += -lconfig  -lthrd
 CFLAGS     += -I libconfig -I libthread
+PATHBIN = ../bin/
 
 #
 # Cible generale
@@ -27,6 +28,7 @@ clean:
 
 main: $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS) $(LOCAL_LIBS) $(LIBS)
+	mv $(EXEC) $(PATHBIN)
 
 
 main.o: main.c
