@@ -12,6 +12,39 @@ Author : Odysseus
 #include <stdlib.h>
 
 
+static char* itoa(int i) {
+	char s[15];
+	sprintf(s,"%d",i);
+	return s;
+}
 
 
+int capture(int width, int height, int fps, int bitrate){
+	char* args[]={	"raspivid",
+			"-t",
+			"0",
+			"-w",
+			itoa(with),
+			"-h",
+			itoa(height),
+			"-fps",
+			itoa(fps),
+			"-b",
+			itoa(bitrate),
+			"-o",
+			NULL };
+	if(execv("/bin/raspivid", args)== -1) {
+		perror("capture.execv");
+		exit(EXIT_FAILURE)
+	}
+	else {
+		#ifdef DEBUG
+			
+		#endif
+			
+		
+						
+	
+	
+}
 
