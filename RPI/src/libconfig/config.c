@@ -15,8 +15,7 @@ Date : 09/07/2017
 
 //List where configuration is stored
 static ConfigList configList;
-//Configuration file pointer
-static FILE* configFile;
+
 
 static ConfigList initList(char option[], char argument[]) {
 	ConfigList list=malloc(sizeof(*list));
@@ -54,8 +53,10 @@ static void free_list(ConfigList* plist){
 
 
 //TODO prevent segfault with long string
+//TODO prevent list initialisation when file is empty
+//TODO support commented lines with '#' caracter in config file
 void getConfig(char filepath[]) {
-	configFile=NULL;
+	FILE* configFile=NULL;
 	configFile=fopen(filepath,"r");
 	if(configFile==NULL) 
 	{
@@ -71,6 +72,7 @@ void getConfig(char filepath[]) {
 		fscanf(configFile,"%99s%99s\n",option,argument);
 		add_head(&configList,option,argument);
 	}	
+	fclose(configFile);
 }
 
 
@@ -85,17 +87,14 @@ void print_config() {
 
 
 void config_close() {
-	if (configFile!=NULL) {
-		free_list(&configList);
-		fclose(configFile);
-	}
+	free_list(&configList);
 }
 
 
 char* config(char option[]) {	
 	Cell* cellAct=configList;
 	int found=0;
-	char* res;
+	char* res=NULL;
 	while(cellAct!=NULL && !found) {
 		if(strcmp(option,cellAct->option)==0) {
 			res=cellAct->argument;
@@ -103,7 +102,11 @@ char* config(char option[]) {
 		}
 		cellAct=cellAct->next;
 	}	
+	if(res==NULL) {
+		fprintf(stderr,"config:option '%s' not found\n",option);
+		config_close();
+		exit(EXIT_FAILURE);
+	}
 	return res;
 }
-
 
