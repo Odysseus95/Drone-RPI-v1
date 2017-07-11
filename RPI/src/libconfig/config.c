@@ -103,7 +103,7 @@ char* config(char option[]) {
 		cellAct=cellAct->next;
 	}	
 	if(res==NULL) {
-		fprintf(stderr,"config:option '%s' not found\n",option);
+		fprintf(stderr,"config:option '%s not found\n",option);
 		config_close();
 		exit(EXIT_FAILURE);
 	}
